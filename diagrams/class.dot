@@ -1,0 +1,24 @@
+digraph C {
+graph [rankdir=TB, bgcolor="white", pad=0.2, nodesep=0.35, ranksep=0.45];
+node [shape=record, style="filled", fontname="Times New Roman", fontsize=10, color="#2F5597", fillcolor="#F7FBFF"];
+edge [fontname="Times New Roman", fontsize=9, color="#555555"];
+i [label="{ClientImporter||- parser\l- validator\l- repository\l|+ importFile(Path) ImportResult\l- processLine(String,int,ImportResult)\l}"];
+p [label="{ClientCsvParser||+ DELIMITER String\l+ FIELD_COUNT int\l|+ parse(String,int) ClientDraft\l}"];
+v [label="{ClientValidator||+ MAX_NAME_LENGTH int\l|+ validate(ClientDraft) List[String]\l}"];
+r [label="{ClientRepository||+ save(Client)\l+ findByInn(String) Client\l}"];
+res [label="{ImportResult|- accepted int\l- errors List[ImportError]\l|+ addAccepted()\l+ addError(ImportError)\l+ accepted() int\l+ errors() List[ImportError]\l}"];
+ex [label="{ClientParseException|- lineNumber int\l|+ lineNumber() int\l}"];
+d [label="{ClientDraft|inn, name, email\l}"];
+c [label="{Client|inn, name, email\l}"];
+e [label="{ImportError|lineNumber int\lmessage String\l}"];
+i -> p [label="1",arrowtail=odiamond,dir=both];
+i -> v [label="1",arrowtail=odiamond,dir=both];
+i -> r [label="1",arrowtail=odiamond,dir=both];
+i -> res [label="returns",style=dashed,arrowhead=open];
+p -> d [label="creates",style=dashed,arrowhead=open];
+p -> ex [label="throws",style=dashed,arrowhead=open];
+v -> d [label="uses",style=dashed,arrowhead=open];
+i -> c [label="creates",style=dashed,arrowhead=open];
+r -> c [label="stores",style=dashed,arrowhead=open];
+res -> e [label="0..*",arrowtail=odiamond,dir=both];
+}
